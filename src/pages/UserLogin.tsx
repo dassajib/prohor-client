@@ -17,7 +17,7 @@ const cardVariants = {
   }
 }
 
-const Login = () => {
+const UserLogin = () => {
   return (
     <div className="min-h-screen flex justify-center items-center bg-gradient-to-tr from-purple-500 to-indigo-600 p-4">
       <motion.div
@@ -69,4 +69,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default UserLogin
