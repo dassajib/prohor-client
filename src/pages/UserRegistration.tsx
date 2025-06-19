@@ -17,7 +17,7 @@ const cardVariants = {
   }
 }
 
-const Registration = () => {
+const UserRegistration = () => {
   return (
     <div className="min-h-screen flex justify-center items-center bg-gradient-to-tr from-purple-500 to-indigo-600 p-4">
       <motion.div
@@ -71,4 +71,4 @@ const Registration = () => {
   )
 }
 
-export default Registration
+export default UserRegistration

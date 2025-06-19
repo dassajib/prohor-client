@@ -1,13 +1,13 @@
-import Login from "@/pages/Login"
-import Registration from "@/pages/Registration"
+import UserLogin from "@/pages/UserLogin"
+import UserRegistration from "@/pages/UserRegistration"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 const AppRoutes = () => {
   return (
     <BrowserRouter>
         <Routes>
-            <Route path="/registration" element={<Registration /> } />
-            <Route path="/login" element={<Login /> } />
+            <Route path="/registration" element={<UserRegistration /> } />
+            <Route path="/login" element={<UserLogin /> } />
         </Routes>
     </BrowserRouter>
   )
