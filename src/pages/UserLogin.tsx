@@ -8,10 +8,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Loader2 } from "lucide-react"
+import { toast } from "sonner"
 
 import { useLoginUser } from "@/hooks/useAuth"
 import { LoginInput, loginSchemas } from "@/schemas/userSchemas"
-import { toast } from "sonner"
 
 const cardVariants = {
   hidden: { opacity: 0, y: 50 },
