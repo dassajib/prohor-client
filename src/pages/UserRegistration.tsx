@@ -49,7 +49,7 @@ const UserRegistration = () => {
       navigate("/login")
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        toast.error(error.response?.data?.message || "Something went wrong")
+        toast.error(error.response?.data?.error || "Something went wrong")
       } else {
         toast.error("Unexpected error occurred")
       }
@@ -102,7 +102,7 @@ const UserRegistration = () => {
                   type="password"
                   placeholder="••••••••"
                   {...register("password")}
-                  autoComplete="password"
+                  autoComplete="new-password"
                 />
                 {errors.password && <p className="text-sm text-red-700">{errors.password.message}</p>}
               </div>
@@ -113,7 +113,7 @@ const UserRegistration = () => {
                   type="password"
                   placeholder="••••••••"
                   {...register("confirmPassword")}
-                  autoComplete="confirmPassword"
+                  autoComplete="new-password"
                 />
                 {errors.confirmPassword && <p className="text-sm text-red-700">{errors.confirmPassword.message}</p>}
               </div>

@@ -1,7 +1,8 @@
 import { useMutation } from "@tanstack/react-query"
 
-import { UserRegisterInterface } from "@/interface/userInterface"
-import { registerUser } from "@/api/userAuthApi"
+import { UserLoginInterface, UserRegisterInterface } from "@/interface/userInterface"
+import { loginUser, registerUser } from "@/api/userAuthApi"
+import { useAuthStore } from "@/store/useAuthStore"
 
 export const useRegisterUser = () => {
     return useMutation({
@@ -9,5 +10,19 @@ export const useRegisterUser = () => {
         onError: (error) => {
             console.error(error)
         },
+    })
+}
+
+export const useLoginUser = () => {
+    const setToken = useAuthStore((state) => state.setToken)
+
+    return useMutation({
+        mutationFn: (data: UserLoginInterface) => loginUser(data),
+        onSuccess: (data) => {
+            setToken(data.access_token)
+        },
+        onError: (error) => {
+            console.log(error)
+        }
     })
 }
