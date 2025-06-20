@@ -2,14 +2,16 @@ import { Link, useNavigate } from "react-router-dom"
 import { easeOut, motion } from "framer-motion"
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { toast } from "sonner"
+import { Loader2 } from "lucide-react"
 
 import { useRegisterUser } from "@/hooks/useAuth"
 import { RegisterInput, registerSchema } from "@/schemas/userSchemas"
-import { toast } from "sonner";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -24,7 +26,7 @@ const cardVariants = {
 }
 
 const UserRegistration = () => {
-  const { mutateAsync, isSuccess, isPending, isError, error } = useRegisterUser()
+  const { mutateAsync, isPending, isError, error } = useRegisterUser()
 
   const { handleSubmit, register, formState: { errors, isValid } } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
@@ -43,20 +45,16 @@ const UserRegistration = () => {
       }
       // return promise
       await mutateAsync(payload)
-      // toast({
-      //   title: "Success",
-      //   description: "Registration successful! Redirecting...",
-      // })
+      toast.success("Registration successful!Please Log In")
       navigate("/login")
-    } catch (error: any) {
-      // toast({
-      //   title: "Error",
-      //   description: error.response?.data?.message || "Something went wrong",
-      //   variant: "destructive",
-      // });
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Something went wrong")
+      } else {
+        toast.error("Unexpected error occurred")
+      }
     }
   };
-
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gradient-to-tr from-purple-500 to-indigo-600 p-4">
@@ -78,7 +76,7 @@ const UserRegistration = () => {
               <div className="flex flex-col gap-1">
                 <Label htmlFor="username" className="text-sm">User Name</Label>
                 <Input
-                  id="name"
+                  id="username"
                   type="text"
                   placeholder="Enter Your Name"
                   {...register("username")}
@@ -124,13 +122,11 @@ const UserRegistration = () => {
                   {(error as any)?.response?.data?.message || "Something went wrong"}
                 </p>
               )}
-
-              {isSuccess && <p className="text-sm text-green-600">Registration successful! Please login.</p>}
             </CardContent>
 
             <CardFooter className="flex flex-col gap-3">
               <Button disabled={!isValid || isPending} type="submit" className="w-full mt-4 cursor-pointer text-white bg-indigo-600 hover:bg-indigo-700 transition-all">
-                {isPending ? "Registering..." : "Register"}
+                {isPending ? <Loader2 className="animate-spin h-5 w-5" /> : "Register"}
               </Button>
               <p className="text-sm text-center text-gray-700 mt-4">
                 Already have an account?
