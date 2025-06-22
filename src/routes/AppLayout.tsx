@@ -13,7 +13,6 @@ import {
 import AppSidebar from "@/components/shared/AppSidebar"
 import Navbar from "@/components/shared/Navbar"
 
-
 const Dashboard = () => {
   return (
     <SidebarProvider>
@@ -41,7 +40,7 @@ const Dashboard = () => {
 
           {/* Main Content */}
           <main className="flex-1 p-6 bg-gray-50/50">
-            <Outlet />
+            {<Outlet />}
           </main>
         </SidebarInset>
       </div>
