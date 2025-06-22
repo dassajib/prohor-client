@@ -16,10 +16,16 @@ import { Badge } from "@/components/ui/badge"
 import { useSidebar } from "@/components/ui/sidebar"
 
 import { useTheme } from "../theme-provider"
+import { useAuthStore } from "@/store/useAuthStore"
+import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 
 const Navbar = () => {
   const { toggleSidebar } = useSidebar()
   const { setTheme } = useTheme()
+
+  const logOut = useAuthStore((state) => state.logOut)
+  const navigate = useNavigate()
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -97,7 +103,12 @@ const Navbar = () => {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem onClick={() => {
+                logOut()
+                navigate("/login")
+                toast.success("Log out successfully.")
+              }}
+                className="cursor-pointer">
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Log out</span>
               </DropdownMenuItem>
