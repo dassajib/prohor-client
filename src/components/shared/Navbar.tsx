@@ -1,6 +1,4 @@
-"use client"
-
-import { Bell, Search, Settings, Menu, LogOut, Sun, Moon } from "lucide-react"
+import { Bell, Settings, Menu, LogOut, Sun, Moon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -10,7 +8,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { useSidebar } from "@/components/ui/sidebar"
@@ -39,14 +36,6 @@ const Navbar = () => {
 
           <div className="hidden md:flex items-center gap-2">
             <div className="font-semibold text-lg">Dashboard</div>
-          </div>
-        </div>
-
-        {/* Center section - Search */}
-        <div className="flex-1 max-w-md mx-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-            <Input placeholder="Search..." className="pl-10 bg-muted/50" />
           </div>
         </div>
 
