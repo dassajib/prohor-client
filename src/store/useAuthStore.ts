@@ -1,4 +1,5 @@
 import { create } from "zustand"
+
 import { UserAuthState } from "@/interface/userInterface"
 
 export const useAuthStore = create<UserAuthState>((set) => ({

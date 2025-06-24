@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -11,6 +10,7 @@ import { Search } from "lucide-react"
 
 import { useGetAllNotes } from "@/hooks/useNote"
 import Loading from "@/components/shared/Loading"
+import NoteEditorModal from "@/components/shared/NoteEditorModal"
 
 const Notes = () => {
   const { data: notes, isLoading, error } = useGetAllNotes()
@@ -19,9 +19,7 @@ const Notes = () => {
     <div className="max-w-7xl mx-auto p-6">
       <header className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
         <h2 className="text-3xl font-extrabold tracking-tight">Your Notes</h2>
-        <Button size="lg" className="whitespace-nowrap">
-          + New Note
-        </Button>
+        <NoteEditorModal />
       </header>
 
       <div className="max-w-md mx-auto mb-8">

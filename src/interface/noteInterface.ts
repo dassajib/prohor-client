@@ -9,3 +9,9 @@ export interface NoteInterface {
     UpdatedAt: string,
     DeletedAt: string | null
 }
+
+export interface NoteFormInterface {
+    title: string,
+    tag: string,
+    content: string,
+}
