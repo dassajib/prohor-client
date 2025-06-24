@@ -1,5 +1,3 @@
-"use client"
-
 import { Link, NavLink } from "react-router-dom"
 import {
   BarChart3,
