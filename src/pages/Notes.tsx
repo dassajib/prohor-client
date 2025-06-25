@@ -10,7 +10,7 @@ import { Search } from "lucide-react"
 
 import { useGetAllNotes } from "@/hooks/useNote"
 import Loading from "@/components/shared/Loading"
-import NoteEditorModal from "@/components/shared/NoteEditorModal"
+import NoteEditorModal from "@/components/shared/NoteEditor/NoteEditorModal"
 
 const Notes = () => {
   const { data: notes, isLoading, error } = useGetAllNotes()
