@@ -1,34 +1,38 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { lazy, Suspense } from "react"
 
-import UserLogin from "@/pages/UserLogin"
-import UserRegistration from "@/pages/UserRegistration"
-import Dashboard from "@/pages/Dashboard"
+const UserLogin = lazy(() => import("@/pages/UserLogin"))
+const UserRegistration = lazy(() => import("@/pages/UserRegistration"))
+const Notes = lazy(() => import("@/pages/Notes"))
+const Dashboard = lazy(() => import("@/pages/Dashboard"))
+const Expenses = lazy(() => import("@/pages/Expenses"))
+const Books = lazy(() => import("@/pages/Books"))
+
 import ProtectedRoute from "./ProtectedRoute"
-import Notes from "@/pages/Notes"
-import Expenses from "@/pages/Expenses"
-import Books from "@/pages/Books"
 import AppLayout from "./AppLayout"
+import Loading from "@/components/shared/Loading"
 
 const AppRoutes = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/registration" element={<UserRegistration />} />
-        <Route path="/login" element={<UserLogin />} />
-        {/* protected routers */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<AppLayout />}>
-            {/* This is the default nested route when user visits '/' */}
-            <Route index element={<Dashboard />} />
+      <Suspense fallback={<Loading />}>
+        <Routes>
+          <Route path="/registration" element={<UserRegistration />} />
+          <Route path="/login" element={<UserLogin />} />
+          {/* protected routers */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<AppLayout />}>
+              {/* this is the default nested route */}
+              <Route index element={<Dashboard />} />
 
-            {/* Other nested routes */}
-            <Route path="notes" element={<Notes />} />
-            <Route path="expenses" element={<Expenses />} />
-            <Route path="books" element={<Books />} />
+              {/* nested routes */}
+              <Route path="notes" element={<Notes />} />
+              <Route path="expenses" element={<Expenses />} />
+              <Route path="books" element={<Books />} />
+            </Route>
           </Route>
-        </Route>
-
-      </Routes>
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   )
 }
