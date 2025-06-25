@@ -59,7 +59,10 @@ const Notes = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-700 line-clamp-4">{note.Content}</p>
+              <div
+                className="prose max-w-full text-gray-700 line-clamp-4"
+                dangerouslySetInnerHTML={{ __html: note.Content }}
+              />
             </CardContent>
           </Card>
         ))}

@@ -1,7 +1,7 @@
-import { useQuery, UseQueryResult } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query"
 
-import { fetchAllNotes } from "@/api/noteApi"
-import { NoteInterface } from "@/interface/noteInterface"
+import { NoteFormInterface, NoteInterface } from "@/interface/noteInterface"
+import { createNote, fetchAllNotes } from "@/api/noteApi"
 
 export const useGetAllNotes = (): UseQueryResult<NoteInterface[], Error> => {
     return useQuery({
@@ -10,5 +10,16 @@ export const useGetAllNotes = (): UseQueryResult<NoteInterface[], Error> => {
         staleTime: 1000 * 60 * 5,
         refetchOnWindowFocus: false,
         retry: 1,
+    })
+}
+
+export const useCreateNote = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: (data: NoteFormInterface) => createNote(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["notes"] })
+        }
     })
 }

@@ -17,9 +17,12 @@ import { Input } from "@/components/ui/input"
 
 import { NoteFormInterface } from "@/interface/noteInterface"
 import MenuBar from "./MenuBar"
+import { useCreateNote } from "@/hooks/useNote";
+import { toast } from "sonner";
 
 const NoteEditorModal = () => {
     const [open, setOpen] = useState(false)
+    const { mutate, isPending } = useCreateNote()
 
     const {
         register,
@@ -51,11 +54,21 @@ const NoteEditorModal = () => {
     })
 
     const onSubmit = (data: NoteFormInterface) => {
-        const content = editor?.getHTML()
-        console.log("Saving:", { ...data, content })
-        setOpen(false)
-        reset()
-        editor?.commands.clearContent()
+        const content = editor?.getHTML() || ""
+        // const plainText = editor?.getText()
+        mutate(
+            { ...data, content },
+            {
+                onSuccess: () => {
+                    setOpen(false)
+                    reset()
+                    editor?.commands.clearContent()
+                },
+                onError: (err) => {
+                    toast.error(`Failed to create note:", ${err.message}`)
+                },
+            }
+        )
     }
 
     return (
@@ -102,7 +115,7 @@ const NoteEditorModal = () => {
                         <Button type="submit" disabled={!watch("title")?.trim() ||
                             !editor?.getText().trim() ||
                             !watch("tag")?.trim()} className="cursor-pointer">
-                            Save Note
+                            {isPending ? "Saving Note" : "Save Note"}
                         </Button>
                     </div>
                 </form>
