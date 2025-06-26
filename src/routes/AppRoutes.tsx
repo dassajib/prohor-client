@@ -15,7 +15,7 @@ import Loading from "@/components/shared/Loading"
 const AppRoutes = () => {
   return (
     <BrowserRouter>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loading variant="page" />}>
         <Routes>
           <Route path="/registration" element={<UserRegistration />} />
           <Route path="/login" element={<UserLogin />} />

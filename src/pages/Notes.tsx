@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { lazy, Suspense, useCallback, useMemo, useState } from "react"
+import { useForm } from "react-hook-form"
 import {
   Card,
   CardContent,
@@ -14,10 +15,11 @@ import { motion } from "framer-motion"
 
 import { NoteInterface } from "@/interface/noteInterface"
 import { useDeleteNote, useGetAllNotes, usePermanentDelNote, useRestoreNote } from "@/hooks/useNote"
-import NoteEditorModal from "@/components/shared/NoteEditor/NoteEditorModal"
-import NoteViewerModal from "@/components/shared/NoteEditor/NoteViewerModal"
+import { useDebounce } from "@/hooks/useDebounce"
 import Loading from "@/components/shared/Loading"
-import { useForm } from "react-hook-form"
+
+const NoteEditorModal = lazy(() => import("@/components/shared/NoteEditor/NoteEditorModal"))
+const NoteViewerModal = lazy(() => import("@/components/shared/NoteEditor/NoteViewerModal"))
 
 const Notes = () => {
   const [showTrashed, setShowTrashed] = useState(false)
@@ -28,30 +30,34 @@ const Notes = () => {
   })
 
   const query = watch("query")
+  // debounce to reducing search api call
+  const debounceQuery = useDebounce(query, 400)
 
-  const { data: notes, isLoading, error } = useGetAllNotes(query)
-  const { mutate: deleteMutate } = useDeleteNote()
-  const { mutate: restoreMutate } = useRestoreNote()
-  const { mutate: permanentlyDelMutate } = usePermanentDelNote()
+  const { data: notes, isLoading, error } = useGetAllNotes(debounceQuery)
+  const { mutate: deleteMutate, isPending: isDeleting } = useDeleteNote()
+  const { mutate: restoreMutate, isPending: isRestoring } = useRestoreNote()
+  const { mutate: permanentlyDelMutate, isPending: isPermanentlyDeleting } = usePermanentDelNote()
 
-  const openNote = (note: NoteInterface) => setSelectedNote(note)
+  const openNote = (note: NoteInterface | null) => setSelectedNote(note)
   const closeNote = () => setSelectedNote(null)
 
-  const handleDelete = (id: number) => {
+  // useCallback to prevent unnecessary rerenders
+  const handleDelete = useCallback((id: number) => {
     deleteMutate(id)
-  }
+  }, [deleteMutate])
 
-  const handleRestore = (id: number) => {
+  const handleRestore = useCallback((id: number) => {
     restoreMutate(id)
-  }
+  }, [restoreMutate])
 
-  const handlePermanentlyDelete = (id: number) => {
+  const handlePermanentlyDelete = useCallback((id: number) => {
     permanentlyDelMutate(id)
-  }
+  }, [permanentlyDelMutate])
 
-  const filteredNotes = notes?.filter(note =>
-    showTrashed ? note.DeletedAt !== null : note.DeletedAt === null
-  )
+  // memoized filteredNotes to avoid unnecessary recalculations
+  const filteredNotes = useMemo(() => {
+    return notes?.filter((note) => showTrashed ? note.DeletedAt !== null : note.DeletedAt === null)
+  }, [showTrashed, notes])
 
   return (
     <div className="max-w-7xl mx-auto p-6">
@@ -93,7 +99,7 @@ const Notes = () => {
         </div>
       </div>
 
-      {isLoading && <Loading />}
+      {isLoading && <Loading variant="notes" />}
 
       {error && (
         <p className="text-center text-red-500">
@@ -170,6 +176,7 @@ const Notes = () => {
                             size="sm"
                             className="text-red-600 border-red-200 hover:bg-red-50 cursor-pointer"
                             onClick={() => handleDelete(note.ID)}
+                            disabled={isDeleting}
                           >
                             <Trash2 className="w-4 h-4 mr-1" />
                           </Button>
@@ -181,6 +188,7 @@ const Notes = () => {
                             size="sm"
                             className="text-green-600 border-green-200 hover:bg-green-50 cursor-pointer"
                             onClick={() => handleRestore(note.ID)}
+                            disabled={isRestoring}
                           >
                             <span className="text-sm font-medium">Restore</span>
                           </Button>
@@ -189,6 +197,7 @@ const Notes = () => {
                             size="sm"
                             className="text-green-600 border-green-200 hover:bg-green-50 cursor-pointer"
                             onClick={() => handlePermanentlyDelete(note.ID)}
+                            disabled={isPermanentlyDeleting}
                           >
                             <span className="text-sm font-medium">Delete Permanently</span>
                           </Button>
@@ -203,11 +212,13 @@ const Notes = () => {
       </motion.div>
 
       {selectedNote && (
-        <NoteViewerModal
-          note={selectedNote}
-          open={!!selectedNote}
-          onClose={closeNote}
-        />
+        <Suspense fallback={<Loading variant="modal" />}>
+          <NoteViewerModal
+            note={selectedNote}
+            open={!!selectedNote}
+            onClose={closeNote}
+          />
+        </Suspense>
       )}
     </div>
   )
