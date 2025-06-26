@@ -25,3 +25,8 @@ export const permanentlyDelNote = async (id: number) => {
     const response = await axiosInstance.delete(`/api/notes/${id}/permanent`)
     return response.data
 }
+
+export const searchNote = async (query: string) => {
+    const response = await axiosInstance.get(`/api/notes/search?q=${query}`)
+    return response.data
+}

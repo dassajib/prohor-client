@@ -17,12 +17,19 @@ import { useDeleteNote, useGetAllNotes, usePermanentDelNote, useRestoreNote } fr
 import NoteEditorModal from "@/components/shared/NoteEditor/NoteEditorModal"
 import NoteViewerModal from "@/components/shared/NoteEditor/NoteViewerModal"
 import Loading from "@/components/shared/Loading"
+import { useForm } from "react-hook-form"
 
 const Notes = () => {
   const [showTrashed, setShowTrashed] = useState(false)
   const [selectedNote, setSelectedNote] = useState<NoteInterface | null>(null)
 
-  const { data: notes, isLoading, error } = useGetAllNotes()
+  const { register, watch } = useForm({
+    defaultValues: { query: "" }
+  })
+
+  const query = watch("query")
+
+  const { data: notes, isLoading, error } = useGetAllNotes(query)
   const { mutate: deleteMutate } = useDeleteNote()
   const { mutate: restoreMutate } = useRestoreNote()
   const { mutate: permanentlyDelMutate } = usePermanentDelNote()
@@ -42,7 +49,9 @@ const Notes = () => {
     permanentlyDelMutate(id)
   }
 
-  const filteredNotes = notes?.filter(note => showTrashed ? note.DeletedAt !== null : note.DeletedAt === null)
+  const filteredNotes = notes?.filter(note =>
+    showTrashed ? note.DeletedAt !== null : note.DeletedAt === null
+  )
 
   return (
     <div className="max-w-7xl mx-auto p-6">
@@ -77,6 +86,7 @@ const Notes = () => {
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-5 w-5" />
           <Input
+            {...register("query")}
             placeholder="Search notes..."
             className="pl-12 bg-muted/70 border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary"
           />
