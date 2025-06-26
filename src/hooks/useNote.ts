@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient, UseQueryResult } from "@tanstack
 import { toast } from "sonner"
 
 import { NoteFormInterface, NoteInterface } from "@/interface/noteInterface"
-import { createNote, deleteNote, fetchAllNotes } from "@/api/noteApi"
+import { createNote, deleteNote, fetchAllNotes, restoreNote } from "@/api/noteApi"
 
 export const useGetAllNotes = (): UseQueryResult<NoteInterface[], Error> => {
     return useQuery({
@@ -32,7 +32,19 @@ export const useDeleteNote = () => {
         mutationFn: (id: number) => deleteNote(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["notes"] })
-            toast.success("Your note moved to trash")
+            toast.success("Your note moved to trash.")
+        }
+    })
+}
+
+export const useRestoreNote = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: (id: number) => restoreNote(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["notes"] })
+            toast.success("Note restored successfully.")
         }
     })
 }

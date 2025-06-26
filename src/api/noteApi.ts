@@ -15,3 +15,8 @@ export const deleteNote = async (id: number): Promise<{ message: string }> => {
     const response = await axiosInstance.delete(`/api/notes/${id}`)
     return response.data
 }
+
+export const restoreNote = async (id: number): Promise<{ message: string }> => {
+    const response = await axiosInstance.put(`/api/notes/${id}/restore`)
+    return response.data
+}

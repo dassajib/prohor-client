@@ -12,8 +12,8 @@ import { Pencil, Search, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 
-import { useDeleteNote, useGetAllNotes } from "@/hooks/useNote"
 import { NoteInterface } from "@/interface/noteInterface"
+import { useDeleteNote, useGetAllNotes, useRestoreNote } from "@/hooks/useNote"
 import NoteEditorModal from "@/components/shared/NoteEditor/NoteEditorModal"
 import NoteViewerModal from "@/components/shared/NoteEditor/NoteViewerModal"
 import Loading from "@/components/shared/Loading"
@@ -23,13 +23,18 @@ const Notes = () => {
   const [selectedNote, setSelectedNote] = useState<NoteInterface | null>(null)
 
   const { data: notes, isLoading, error } = useGetAllNotes()
-  const { mutate } = useDeleteNote()
+  const { mutate: deleteMutate } = useDeleteNote()
+  const { mutate: restoreMutate } = useRestoreNote()
 
   const openNote = (note: NoteInterface) => setSelectedNote(note)
   const closeNote = () => setSelectedNote(null)
 
   const handleDelete = (id: number) => {
-    mutate(id)
+    deleteMutate(id)
+  }
+
+  const handleRestore = (id: number) => {
+    restoreMutate(id)
   }
 
   const filteredNotes = notes?.filter(note => showTrashed ? note.DeletedAt !== null : note.DeletedAt === null)
@@ -156,10 +161,19 @@ const Notes = () => {
                         </>
                       ) : (
                         <>
-                          <Button variant="outline" size="sm" className="text-green-600 border-green-200 hover:bg-green-50 cursor-pointer">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-green-600 border-green-200 hover:bg-green-50 cursor-pointer"
+                            onClick={() => handleRestore(note.ID)}
+                          >
                             <span className="text-sm font-medium">Restore</span>
                           </Button>
-                          <Button variant="outline" size="sm" className="text-green-600 border-green-200 hover:bg-green-50 cursor-pointer">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-green-600 border-green-200 hover:bg-green-50 cursor-pointer"
+                          >
                             <span className="text-sm font-medium">Delete Permanently</span>
                           </Button>
                         </>
