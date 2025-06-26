@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 
 import { NoteInterface } from "@/interface/noteInterface"
-import { useDeleteNote, useGetAllNotes, useRestoreNote } from "@/hooks/useNote"
+import { useDeleteNote, useGetAllNotes, usePermanentDelNote, useRestoreNote } from "@/hooks/useNote"
 import NoteEditorModal from "@/components/shared/NoteEditor/NoteEditorModal"
 import NoteViewerModal from "@/components/shared/NoteEditor/NoteViewerModal"
 import Loading from "@/components/shared/Loading"
@@ -25,6 +25,7 @@ const Notes = () => {
   const { data: notes, isLoading, error } = useGetAllNotes()
   const { mutate: deleteMutate } = useDeleteNote()
   const { mutate: restoreMutate } = useRestoreNote()
+  const { mutate: permanentlyDelMutate } = usePermanentDelNote()
 
   const openNote = (note: NoteInterface) => setSelectedNote(note)
   const closeNote = () => setSelectedNote(null)
@@ -35,6 +36,10 @@ const Notes = () => {
 
   const handleRestore = (id: number) => {
     restoreMutate(id)
+  }
+
+  const handlePermanentlyDelete = (id: number) => {
+    permanentlyDelMutate(id)
   }
 
   const filteredNotes = notes?.filter(note => showTrashed ? note.DeletedAt !== null : note.DeletedAt === null)
@@ -173,6 +178,7 @@ const Notes = () => {
                             variant="outline"
                             size="sm"
                             className="text-green-600 border-green-200 hover:bg-green-50 cursor-pointer"
+                            onClick={() => handlePermanentlyDelete(note.ID)}
                           >
                             <span className="text-sm font-medium">Delete Permanently</span>
                           </Button>

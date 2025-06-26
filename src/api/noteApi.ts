@@ -20,3 +20,8 @@ export const restoreNote = async (id: number): Promise<{ message: string }> => {
     const response = await axiosInstance.put(`/api/notes/${id}/restore`)
     return response.data
 }
+
+export const permanentlyDelNote = async (id: number) => {
+    const response = await axiosInstance.delete(`/api/notes/${id}/permanent`)
+    return response.data
+}
