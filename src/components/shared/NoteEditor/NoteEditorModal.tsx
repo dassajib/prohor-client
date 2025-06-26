@@ -16,9 +16,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 import { NoteFormInterface } from "@/interface/noteInterface"
-import MenuBar from "./MenuBar"
 import { useCreateNote } from "@/hooks/useNote";
 import { toast } from "sonner";
+import MenuBar from "./MenuBar"
 
 const NoteEditorModal = () => {
     const [open, setOpen] = useState(false)

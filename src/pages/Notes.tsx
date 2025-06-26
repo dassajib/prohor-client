@@ -19,7 +19,7 @@ import { useDebounce } from "@/hooks/useDebounce"
 import Loading from "@/components/shared/Loading"
 
 const NoteEditorModal = lazy(() => import("@/components/shared/NoteEditor/NoteEditorModal"))
-const NoteViewerModal = lazy(() => import("@/components/shared/NoteEditor/NoteViewerModal"))
+const NoteReaderModal = lazy(() => import("@/components/shared/NoteEditor/NoteReaderModal"))
 
 const Notes = () => {
   const [showTrashed, setShowTrashed] = useState(false)
@@ -213,7 +213,7 @@ const Notes = () => {
 
       {selectedNote && (
         <Suspense fallback={<Loading variant="modal" />}>
-          <NoteViewerModal
+          <NoteReaderModal
             note={selectedNote}
             open={!!selectedNote}
             onClose={closeNote}

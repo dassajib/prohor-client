@@ -30,3 +30,8 @@ export const searchNote = async (query: string) => {
     const response = await axiosInstance.get(`/api/notes/search?q=${query}`)
     return response.data
 }
+
+export const editNote = async (id: number, data: NoteInterface): Promise<NoteInterface> => {
+    const response = await axiosInstance.put(`/api/notes/${id}`, data)
+    return response.data
+}
