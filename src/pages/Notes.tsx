@@ -32,6 +32,8 @@ const Notes = () => {
     mutate(id)
   }
 
+  const filteredNotes = notes?.filter(note => showTrashed ? note.DeletedAt !== null : note.DeletedAt === null)
+
   return (
     <div className="max-w-7xl mx-auto p-6">
       {/* header */}
@@ -45,12 +47,14 @@ const Notes = () => {
       {/* tabs */}
       <div className="flex justify-center gap-4 mb-6">
         <Button
+          className="cursor-pointer"
           variant={!showTrashed ? "default" : "outline"}
           onClick={() => setShowTrashed(false)}
         >
           Active Notes
         </Button>
         <Button
+          className="cursor-pointer"
           variant={showTrashed ? "default" : "outline"}
           onClick={() => setShowTrashed(true)}
         >
@@ -77,7 +81,7 @@ const Notes = () => {
         </p>
       )}
 
-      {!isLoading && notes?.length === 0 && (
+      {!isLoading && filteredNotes?.length === 0 && (
         <p className="text-center text-gray-400 italic">
           {showTrashed ? "Trash is empty." : "No notes found."}
         </p>
@@ -88,62 +92,78 @@ const Notes = () => {
         layout
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
       >
-        {notes?.map((note, index) => (
+        {filteredNotes?.map((note, index) => (
           <motion.div
             key={note.ID}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
           >
-            <Card onClick={() => openNote(note)} className="flex flex-col justify-between h-[360px] w-full border rounded-xl cursor-pointer shadow-sm hover:shadow-md transition duration-200">
-              <CardHeader className="flex flex-col gap-1">
-                <CardTitle
-                  className="text-xl font-semibold text-gray-800 truncate"
-                  title={note.Title || "Untitled"}
-                >
-                  {(note.Title || "Untitled").length > 24
-                    ? (note.Title || "Untitled").slice(0, 24) + "..."
-                    : note.Title || "Untitled"}
-                </CardTitle>
+            <Card className="flex flex-col justify-between h-[360px] w-full border rounded-xl shadow-sm hover:shadow-md transition duration-200">
+              <div onClick={() => openNote(note)} className="cursor-pointer">
+                <CardHeader className="flex flex-col gap-1">
+                  <CardTitle
+                    className="text-xl font-semibold text-gray-800 truncate"
+                    title={note.Title || "Untitled"}
+                  >
+                    {(note.Title || "Untitled").length > 24
+                      ? (note.Title || "Untitled").slice(0, 24) + "..."
+                      : note.Title || "Untitled"}
+                  </CardTitle>
 
-                <CardDescription className="text-sm text-muted-foreground">
-                  #{note.Tag}
-                </CardDescription>
+                  <CardDescription className="text-sm text-muted-foreground">
+                    #{note.Tag}
+                  </CardDescription>
 
-                <CardDescription className="text-sm text-muted-foreground">
-                  {new Date(note.CreatedAt).toLocaleDateString(undefined, {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </CardDescription>
-              </CardHeader>
+                  <CardDescription className="text-sm text-muted-foreground">
+                    {new Date(note.CreatedAt).toLocaleDateString(undefined, {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </CardDescription>
+                </CardHeader>
 
-              <CardContent className="mb-4 overflow-hidden">
-                <div
-                  className="prose max-w-full text-gray-700 line-clamp-5"
-                  dangerouslySetInnerHTML={{ __html: note.Content }}
-                />
-              </CardContent>
+                <CardContent className="mb-4 overflow-hidden">
+                  <div
+                    className="prose max-w-full text-gray-700 line-clamp-5"
+                    dangerouslySetInnerHTML={{ __html: note.Content }}
+                  />
+                </CardContent>
+              </div>
 
               <CardFooter>
                 <div className="flex items-center justify-between pt-0 w-full">
                   <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-blue-600 border-blue-200 hover:bg-blue-50 cursor-pointer"
-                    >
-                      <Pencil className="w-4 h-4 mr-1" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-red-600 border-red-200 hover:bg-red-50 cursor-pointer"
-                      onClick={() => handleDelete(note.ID)}
-                    >
-                      <Trash2 className="w-4 h-4 mr-1" />
-                    </Button>
+                    {
+                      !showTrashed ? (
+                        <>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-blue-600 border-blue-200 hover:bg-blue-50 cursor-pointer"
+                          >
+                            <Pencil className="w-4 h-4 mr-1" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-red-600 border-red-200 hover:bg-red-50 cursor-pointer"
+                            onClick={() => handleDelete(note.ID)}
+                          >
+                            <Trash2 className="w-4 h-4 mr-1" />
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Button variant="outline" size="sm" className="text-green-600 border-green-200 hover:bg-green-50 cursor-pointer">
+                            <span className="text-sm font-medium">Restore</span>
+                          </Button>
+                          <Button variant="outline" size="sm" className="text-green-600 border-green-200 hover:bg-green-50 cursor-pointer">
+                            <span className="text-sm font-medium">Delete Permanently</span>
+                          </Button>
+                        </>
+                      )}
                   </div>
                 </div>
               </CardFooter>

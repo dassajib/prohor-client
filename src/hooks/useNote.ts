@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query"
+import { toast } from "sonner"
 
 import { NoteFormInterface, NoteInterface } from "@/interface/noteInterface"
 import { createNote, deleteNote, fetchAllNotes } from "@/api/noteApi"
@@ -31,6 +32,7 @@ export const useDeleteNote = () => {
         mutationFn: (id: number) => deleteNote(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["notes"] })
+            toast.success("Your note moved to trash")
         }
     })
 }
