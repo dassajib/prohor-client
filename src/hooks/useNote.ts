@@ -2,15 +2,16 @@ import { useMutation, useQuery, useQueryClient, UseQueryResult } from "@tanstack
 import { toast } from "sonner"
 
 import { NoteFormInterface, NoteInterface } from "@/interface/noteInterface"
-import { createNote, deleteNote, fetchAllNotes, permanentlyDelNote, restoreNote } from "@/api/noteApi"
+import { createNote, deleteNote, fetchAllNotes, permanentlyDelNote, restoreNote, searchNote } from "@/api/noteApi"
 
-export const useGetAllNotes = (): UseQueryResult<NoteInterface[], Error> => {
+export const useGetAllNotes = (query: string): UseQueryResult<NoteInterface[], Error> => {
     return useQuery({
-        queryKey: ["notes"],
-        queryFn: fetchAllNotes,
+        queryKey: ["notes", query],
+        queryFn: () => query ? searchNote(query) : fetchAllNotes(),
         staleTime: 1000 * 60 * 5,
         refetchOnWindowFocus: false,
         retry: 1,
+        enabled: query !== undefined,
     })
 }
 
