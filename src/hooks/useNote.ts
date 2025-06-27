@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient, UseQueryResult } from "@tanstack
 import { toast } from "sonner"
 
 import { NoteFormInterface, NoteInterface } from "@/interface/noteInterface"
-import { createNote, deleteNote, fetchAllNotes, permanentlyDelNote, restoreNote, searchNote } from "@/api/noteApi"
+import { createNote, deleteNote, editNote, fetchAllNotes, permanentlyDelNote, restoreNote, searchNote } from "@/api/noteApi"
 
 export const useGetAllNotes = (query: string): UseQueryResult<NoteInterface[], Error> => {
     return useQuery({
@@ -61,3 +61,20 @@ export const usePermanentDelNote = () => {
         }
     })
 }
+
+export const useEditNote = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ id, data }: { id: number; data: NoteFormInterface }) =>
+            editNote(id, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["notes"] })
+        },
+        onError: (error: any) => {
+            toast.error(
+                error?.response?.data?.message || error?.message || "Failed to edit note"
+            );
+        },
+    });
+};

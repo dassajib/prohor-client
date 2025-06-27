@@ -15,3 +15,8 @@ export interface NoteFormInterface {
     tag: string,
     content: string,
 }
+
+export interface CreateAndEditNoteModalProps {
+    noteToEdit?: NoteInterface | null
+    onClose: () => void
+}

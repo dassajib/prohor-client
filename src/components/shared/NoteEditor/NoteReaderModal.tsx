@@ -1,9 +1,10 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { X, Pencil, Trash2 } from "lucide-react"
+import { X, Pencil } from "lucide-react"
+
 import { NoteInterface } from "@/interface/noteInterface";
 
-const NoteViewerModal = ({ note, open, onClose }: { note: NoteInterface; open: boolean; onClose: () => void }) => {
+const NoteReaderModal = ({ note, open, onClose }: { note: NoteInterface; open: boolean; onClose: () => void }) => {
     if (!note) return null
 
     return (
@@ -28,4 +29,4 @@ const NoteViewerModal = ({ note, open, onClose }: { note: NoteInterface; open: b
     )
 }
 
-export default NoteViewerModal
+export default NoteReaderModal

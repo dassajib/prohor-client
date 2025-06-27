@@ -18,11 +18,12 @@ import { useDeleteNote, useGetAllNotes, usePermanentDelNote, useRestoreNote } fr
 import { useDebounce } from "@/hooks/useDebounce"
 import Loading from "@/components/shared/Loading"
 
-const NoteEditorModal = lazy(() => import("@/components/shared/NoteEditor/NoteEditorModal"))
-const NoteViewerModal = lazy(() => import("@/components/shared/NoteEditor/NoteViewerModal"))
+const CreateAndEditNoteModal = lazy(() => import("@/components/shared/NoteEditor/CreateAndEditNoteModal"))
+const NoteReaderModal = lazy(() => import("@/components/shared/NoteEditor/NoteReaderModal"))
 
 const Notes = () => {
   const [showTrashed, setShowTrashed] = useState(false)
+  const [noteToEdit, setNoteToEdit] = useState<NoteInterface | null>(null)
   const [selectedNote, setSelectedNote] = useState<NoteInterface | null>(null)
 
   const { register, watch } = useForm({
@@ -59,6 +60,10 @@ const Notes = () => {
     return notes?.filter((note) => showTrashed ? note.DeletedAt !== null : note.DeletedAt === null)
   }, [showTrashed, notes])
 
+  const handleEdit = (note: NoteInterface) => {
+    setNoteToEdit(note)
+  }
+
   return (
     <div className="max-w-7xl mx-auto p-6">
       {/* header */}
@@ -66,7 +71,10 @@ const Notes = () => {
         <h2 className="text-3xl font-extrabold tracking-tight">
           {showTrashed ? "Trash" : "Your Notes"}
         </h2>
-        <NoteEditorModal />
+        <CreateAndEditNoteModal
+          noteToEdit={noteToEdit}
+          onClose={() => setNoteToEdit(null)}
+        />
       </header>
 
       {/* tabs */}
@@ -168,6 +176,7 @@ const Notes = () => {
                             variant="outline"
                             size="sm"
                             className="text-blue-600 border-blue-200 hover:bg-blue-50 cursor-pointer"
+                            onClick={() => handleEdit(note)}
                           >
                             <Pencil className="w-4 h-4 mr-1" />
                           </Button>
@@ -213,7 +222,7 @@ const Notes = () => {
 
       {selectedNote && (
         <Suspense fallback={<Loading variant="modal" />}>
-          <NoteViewerModal
+          <NoteReaderModal
             note={selectedNote}
             open={!!selectedNote}
             onClose={closeNote}
