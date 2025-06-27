@@ -20,7 +20,7 @@ import { useCreateNote } from "@/hooks/useNote";
 import { toast } from "sonner";
 import MenuBar from "./MenuBar"
 
-const NoteEditorModal = () => {
+const CreateNoteModal = () => {
     const [open, setOpen] = useState(false)
     const { mutate, isPending } = useCreateNote()
 
@@ -124,4 +124,4 @@ const NoteEditorModal = () => {
     )
 }
 
-export default NoteEditorModal
+export default CreateNoteModal

@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { X, Pencil } from "lucide-react"
+
 import { NoteInterface } from "@/interface/noteInterface";
 
 const NoteReaderModal = ({ note, open, onClose }: { note: NoteInterface; open: boolean; onClose: () => void }) => {
