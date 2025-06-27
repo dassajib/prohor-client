@@ -18,11 +18,12 @@ import { useDeleteNote, useGetAllNotes, usePermanentDelNote, useRestoreNote } fr
 import { useDebounce } from "@/hooks/useDebounce"
 import Loading from "@/components/shared/Loading"
 
-const CreateNoteModal = lazy(() => import("@/components/shared/NoteEditor/CreateNoteModal"))
+const CreateAndEditNoteModal = lazy(() => import("@/components/shared/NoteEditor/CreateAndEditNoteModal"))
 const NoteReaderModal = lazy(() => import("@/components/shared/NoteEditor/NoteReaderModal"))
 
 const Notes = () => {
   const [showTrashed, setShowTrashed] = useState(false)
+  const [noteToEdit, setNoteToEdit] = useState<NoteInterface | null>(null)
   const [selectedNote, setSelectedNote] = useState<NoteInterface | null>(null)
 
   const { register, watch } = useForm({
@@ -59,8 +60,8 @@ const Notes = () => {
     return notes?.filter((note) => showTrashed ? note.DeletedAt !== null : note.DeletedAt === null)
   }, [showTrashed, notes])
 
-  const handleEdit = (id: number) => {
-    console.log(id);
+  const handleEdit = (note: NoteInterface) => {
+    setNoteToEdit(note)
   }
 
   return (
@@ -70,7 +71,10 @@ const Notes = () => {
         <h2 className="text-3xl font-extrabold tracking-tight">
           {showTrashed ? "Trash" : "Your Notes"}
         </h2>
-        <CreateNoteModal />
+        <CreateAndEditNoteModal
+          noteToEdit={noteToEdit}
+          onClose={() => setNoteToEdit(null)}
+        />
       </header>
 
       {/* tabs */}
@@ -172,7 +176,7 @@ const Notes = () => {
                             variant="outline"
                             size="sm"
                             className="text-blue-600 border-blue-200 hover:bg-blue-50 cursor-pointer"
-                            onClick={() => handleEdit(note.ID)}
+                            onClick={() => handleEdit(note)}
                           >
                             <Pencil className="w-4 h-4 mr-1" />
                           </Button>

@@ -63,30 +63,18 @@ export const usePermanentDelNote = () => {
 }
 
 export const useEditNote = () => {
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ id, data }: { id: number, data: NoteInterface }) => editNote(id, data),
-        onSuccess: (updatedNote: NoteInterface) => {
-            // update notes cache optimistically
-            queryClient.setQueryData<NoteInterface[]>(["notes"], (oldNotes) =>
-                oldNotes
-                    ? oldNotes.map((note) =>
-                        note.ID === updatedNote.ID ? updatedNote : note
-                    )
-                    : []
-            )
-            toast.success("Note edited successfully")
+        mutationFn: ({ id, data }: { id: number; data: NoteFormInterface }) =>
+            editNote(id, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["notes"] })
         },
         onError: (error: any) => {
             toast.error(
-                error?.response?.data?.message ||
-                error?.message ||
-                "Failed to edit note"
-            )
+                error?.response?.data?.message || error?.message || "Failed to edit note"
+            );
         },
-        onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ["notes"] })
-        },
-    })
-}
+    });
+};
