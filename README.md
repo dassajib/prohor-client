@@ -1,54 +1,70 @@
-# React + TypeScript + Vite
+# Prohor Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, performant React 18+ client application built with Vite, TypeScript, Tailwind CSS, and Zustand state management.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## About
 
-## Expanding the ESLint configuration
+`prohor-client` is the front-end client for the Prohor platform.  
+It leverages the latest React ecosystem features including React Router v7, React Query, Zustand, and the Radix UI component primitives for accessible UI components.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The app is designed for:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- High performance via Vite's fast build system
+- Responsive UI styled with Shadcn and Tailwind CSS and class-variance-authority for utility-driven styling
+- Rich text editing powered by TipTap extensions
+- Form management with React Hook Form and Zod validation
+- Smooth animations with Framer Motion
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Tech Stack
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+| Category          | Libraries / Tools                      |
+| ----------------- | ------------------------------------ |
+| Framework         | React 19.x                           |
+| Bundler           | Vite                                |
+| Styling           | Tailwind CSS, class-variance-authority, tw-animate-css |
+| State Management  | Zustand                             |
+| Routing           | React Router DOM v7                  |
+| API & Data Fetch  | Axios, React Query                   |
+| Forms & Validation| React Hook Form, Zod, @hookform/resolvers |
+| UI Components     | Radix UI (AlertDialog, Avatar, Tooltip, etc.) |
+| Rich Text Editor  | TipTap + Extensions                  |
+| Animations        | Framer Motion                       |
+| Tooling           | ESLint, TypeScript, Prettier (assumed) |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (>=18.x recommended)
+- npm or yarn
+
+### Installation
+
+```bash
+git clone https://github.com/dassajib/prohor-client.git
+cd prohor-client
+npm install
+# or
+yarn install
+
+### Running in Development
+npm run dev
+# or
+yarn dev
+
+### Environment Variables
+Example .env:
+VITE_API_URL=https://api.prohor.com
+VITE_OTHER_VARIABLE=your_value
+
+### Author
+Sajib Das
+GitHub: github.com/dassajib
+
+
