@@ -32,8 +32,13 @@ export const searchNote = async (query: string) => {
 }
 
 export const editNote = async (id: number, data: NoteFormInterface): Promise<NoteInterface> => {
-    console.log('sending backend:', { id, data });
     const response = await axiosInstance.put(`/api/notes/${id}`, data);
-    console.log('api res:', response);
     return response.data;
+}
+
+export const notePinToggle = async (id: number, pinned: boolean) => {
+    const response = await axiosInstance.put(`/api/notes/${id}/pin`, {
+        pinned: pinned,
+    })
+    return response.data
 }

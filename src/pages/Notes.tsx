@@ -9,12 +9,12 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Pencil, Search, Trash2 } from "lucide-react"
+import { Pencil, Pin, PinOff, Search, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 
 import { NoteInterface } from "@/interface/noteInterface"
-import { useDeleteNote, useGetAllNotes, usePermanentDelNote, useRestoreNote } from "@/hooks/useNote"
+import { useDeleteNote, useGetAllNotes, useNotePinToggle, usePermanentDelNote, useRestoreNote } from "@/hooks/useNote"
 import { useDebounce } from "@/hooks/useDebounce"
 import Loading from "@/components/shared/Loading"
 
@@ -38,6 +38,7 @@ const Notes = () => {
   const { mutate: deleteMutate, isPending: isDeleting } = useDeleteNote()
   const { mutate: restoreMutate, isPending: isRestoring } = useRestoreNote()
   const { mutate: permanentlyDelMutate, isPending: isPermanentlyDeleting } = usePermanentDelNote()
+  const { mutate: togglePin, isPending: isTogglingPin } = useNotePinToggle()
 
   const openNote = (note: NoteInterface | null) => setSelectedNote(note)
   const closeNote = () => setSelectedNote(null)
@@ -168,6 +169,7 @@ const Notes = () => {
 
               <CardFooter>
                 <div className="flex items-center justify-between pt-0 w-full">
+                  {/* note buttons */}
                   <div className="flex gap-2">
                     {
                       !showTrashed ? (
@@ -213,6 +215,22 @@ const Notes = () => {
                         </>
                       )}
                   </div>
+
+                  {/* pin note */}
+                  <button
+                    onClick={() => togglePin({ id: note.ID, pinned: !note.Pinned })}
+                    disabled={isTogglingPin}
+                    className={`transition cursor-pointer ${note.Pinned
+                        ? "text-yellow-600 hover:text-yellow-700"
+                        : "text-gray-400 hover:text-yellow-600"
+                      }`}
+                  >
+                    {note.Pinned ? (
+                      <Pin className="h-5 w-5 fill-yellow-500" />
+                    ) : (
+                      <PinOff className="h-5 w-5" />
+                    )}
+                  </button>
                 </div>
               </CardFooter>
             </Card>
