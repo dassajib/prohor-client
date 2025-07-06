@@ -4,6 +4,7 @@ export interface NoteInterface {
     Title: string,
     Content: string,
     Tag: string,
+    Pinned: boolean,
     Date: string,
     CreatedAt: string,
     UpdatedAt: string,
@@ -19,4 +20,9 @@ export interface NoteFormInterface {
 export interface CreateAndEditNoteModalProps {
     noteToEdit?: NoteInterface | null
     onClose: () => void
+}
+
+export interface PinTogglePayloadInterface {
+    id: number
+    pinned: boolean
 }

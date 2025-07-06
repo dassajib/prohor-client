@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query"
 import { toast } from "sonner"
 
-import { NoteFormInterface, NoteInterface } from "@/interface/noteInterface"
-import { createNote, deleteNote, editNote, fetchAllNotes, permanentlyDelNote, restoreNote, searchNote } from "@/api/noteApi"
+import { NoteFormInterface, NoteInterface, PinTogglePayloadInterface } from "@/interface/noteInterface"
+import { createNote, deleteNote, editNote, fetchAllNotes, notePinToggle, permanentlyDelNote, restoreNote, searchNote } from "@/api/noteApi"
 
 export const useGetAllNotes = (query: string): UseQueryResult<NoteInterface[], Error> => {
     return useQuery({
@@ -63,7 +63,7 @@ export const usePermanentDelNote = () => {
 }
 
 export const useEditNote = () => {
-    const queryClient = useQueryClient();
+    const queryClient = useQueryClient()
 
     return useMutation({
         mutationFn: ({ id, data }: { id: number; data: NoteFormInterface }) =>
@@ -78,3 +78,17 @@ export const useEditNote = () => {
         },
     });
 };
+
+export const useNotePinToggle = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: ({ id, pinned }: PinTogglePayloadInterface) => notePinToggle(id, pinned),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["notes"] })
+        },
+        onError: () => {
+            toast.error("Cannot pin/unpin note")
+        },
+    })
+}
