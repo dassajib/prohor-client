@@ -49,16 +49,29 @@ const navigationData = {
 
 const AppSidebar = () => {
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar
+      collapsible="icon"
+      className="transition-colors duration-300
+        dark:bg-[var(--sidebar)] dark:text-[var(--sidebar-foreground)]"
+    >
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link to="/">
-                <div className="flex aspect-square size-10 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+              <Link
+                to="/"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg
+                  hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors duration-300
+                  dark:hover:bg-[var(--sidebar-accent)] dark:hover:text-[var(--sidebar-accent-foreground)]"
+              >
+                <div
+                  className="flex aspect-square size-10 items-center justify-center rounded-lg
+                    bg-sidebar-primary text-sidebar-primary-foreground
+                    dark:bg-[var(--sidebar-primary)] dark:text-[var(--sidebar-primary-foreground)]"
+                >
                   <BarChart3 className="size-4" />
                 </div>
-                <div className="flex flex-col gap-0.5 leading-none">
+                <div className="flex flex-col gap-0.5 leading-none dark:text-[var(--sidebar-foreground)]">
                   <span className="font-semibold text-lg">Prohor</span>
                   <span className="text-xs">Enterprise</span>
                 </div>
@@ -71,7 +84,7 @@ const AppSidebar = () => {
       <SidebarContent>
         {/* Main Navigation */}
         <SidebarGroup>
-          <SidebarGroupLabel>Main</SidebarGroupLabel>
+          <SidebarGroupLabel className="dark:text-[var(--sidebar-foreground)]">Main</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navigationData.main.map((item) => (
@@ -81,8 +94,12 @@ const AppSidebar = () => {
                       <SidebarMenuButton
                         asChild
                         className={`flex items-center gap-2 w-full px-3 py-2 rounded-md text-sm font-medium transition-colors
-                                  ${isActive ? "bg-muted text-primary shadow-sm" :
-                            "text-muted-foreground hover:text-primary hover:bg-muted"}`}>
+                          ${
+                            isActive
+                              ? "bg-muted text-primary shadow-sm dark:bg-[var(--muted)] dark:text-[var(--primary)] dark:shadow-glow"
+                              : "text-muted-foreground hover:text-primary hover:bg-muted dark:text-[var(--muted-foreground)] dark:hover:text-[var(--primary)] dark:hover:bg-[var(--muted)]"
+                          }`}
+                      >
                         <div className="flex items-center gap-2">
                           <item.icon className="size-4" />
                           <span>{item.title}</span>
@@ -101,7 +118,11 @@ const AppSidebar = () => {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Link to="/">
+              <Link
+                to="/"
+                className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors duration-300
+                  dark:hover:bg-[var(--sidebar-accent)] dark:hover:text-[var(--sidebar-accent-foreground)]"
+              >
                 <Settings />
                 <span>Settings</span>
               </Link>
