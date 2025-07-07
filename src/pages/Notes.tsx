@@ -217,20 +217,22 @@ const Notes = () => {
                   </div>
 
                   {/* pin note */}
-                  <button
-                    onClick={() => togglePin({ id: note.ID, pinned: !note.Pinned })}
-                    disabled={isTogglingPin}
-                    className={`transition cursor-pointer ${note.Pinned
+                  {!showTrashed && (
+                    <button
+                      onClick={() => togglePin({ id: note.ID, pinned: !note.Pinned })}
+                      disabled={isTogglingPin}
+                      className={`transition cursor-pointer ${note.Pinned
                         ? "text-yellow-600 hover:text-yellow-700"
                         : "text-gray-400 hover:text-yellow-600"
-                      }`}
-                  >
-                    {note.Pinned ? (
-                      <Pin className="h-5 w-5 fill-yellow-500" />
-                    ) : (
-                      <PinOff className="h-5 w-5" />
-                    )}
-                  </button>
+                        }`}
+                    >
+                      {note.Pinned ? (
+                        <Pin className="h-5 w-5 fill-yellow-500" />
+                      ) : (
+                        <PinOff className="h-5 w-5" />
+                      )}
+                    </button>
+                  )}
                 </div>
               </CardFooter>
             </Card>
