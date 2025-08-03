@@ -11,6 +11,22 @@ export interface NoteInterface {
     DeletedAt: string | null
 }
 
+export interface NoteProps {
+    note: NoteInterface
+    index: number
+    showTrashed: boolean
+    onOpen: (note: NoteInterface) => void
+    onEdit: (note: NoteInterface) => void
+    onDelete: (id: number) => void
+    onRestore: (id: number) => void
+    onPermanentlyDelete: (id: number) => void
+    onTogglePin: (id: number, pinned: boolean) => void
+    isDeleting: boolean
+    isRestoring: boolean
+    isPermanentlyDeleting: boolean
+    isTogglingPin: boolean
+}
+
 export interface NoteFormInterface {
     title: string,
     tag: string,
